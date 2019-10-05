@@ -13,31 +13,36 @@ def putLetter(letter, word):
     return word
 
 
-lifeCount = 5
-xWord = [i for i in 'apple']
+liveCount = 5
+dictionary = open('dictionary').read().splitlines()
+xWord = random.choice(dictionary)
 print(xWord)
-curWord = ['_'] * 5
-usedLetters = []
+curWord = ['_'] * len(xWord)
+usedLetters = set()
 
 
 def mainLoop():
-    global lifeCount
+    global liveCount
     writeCurWord(curWord)
     if '_' not in curWord:
         print('You win')
         exit()
     else:
         guessLetter = input()
-        if guessLetter in xWord:
-            putLetter(guessLetter, curWord)
+        if guessLetter in usedLetters:
+            print('You\'ve already picked this letter')
         else:
-            lifeCount -= 1
-            if lifeCount >= 0:
-                print(lifeCount, 'lifes remain')
+            if guessLetter in xWord:
+                putLetter(guessLetter, curWord)
             else:
-                print(*xWord)
-                print('You loose(')
-                exit(0)
+                liveCount -= 1
+                if liveCount >= 0:
+                    print(liveCount, 'lives left')
+                else:
+                    print(*xWord)
+                    print('You loose(')
+                    exit(0)
+            usedLetters.add(guessLetter)
     mainLoop()
 
 
